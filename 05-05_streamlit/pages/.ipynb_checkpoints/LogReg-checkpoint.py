@@ -38,14 +38,12 @@ class LogReg:
 
 st.title("Логистическая регрессия")
 uploaded_train = st.file_uploader("Загрузите обучающую выборку CSV", type=["csv"])
-st.write('Обучающая выборка должна содержать доход, рейтинг по кредитной карте и данные о том, был ли одобрен кредит (в формате: 1 - кредит был одобрен, 0 - кредит не одобрен)')
 uploaded_test = st.file_uploader("Загрузите тестовую выборку CSV", type=["csv"])
 if uploaded_train is not None and uploaded_test is not None:
     train = pd.read_csv(uploaded_train)
     test = pd.read_csv(uploaded_test)
     features = st.multiselect("Выберите параметры для обучения", train.columns, default=[]) # сохраняем параметры для нормировки
     y_true = st.selectbox("Выберите параметр обучения (таргет)", train.columns)
-    st.write('Таргет - это параметр, который модель должна предсказать')
     normalize = st.checkbox("Нормировать данные (StandardScaler)")
     
     if normalize:
@@ -62,15 +60,13 @@ if uploaded_train is not None and uploaded_test is not None:
         train_intercept = model.intercept_
         selected_features = ', '.join(features)
         st.write(f"Выбранные параметры: {selected_features}")
-        st.subheader("Веса модели (коэффициенты):")
+        st.write("Веса модели (коэффициенты):")
         st.write(pd.DataFrame(train_coefs, index=features, columns=["Weights"]))  
         
         train_pred = model.predict(train[features])
-        st.subheader("Предсказания на обучающем наборе данных:")
         train_comparison_df = pd.DataFrame({'Actual': train[y_true], 'Predicted': train_pred})
         st.write("Сравнение предсказанных и реальных значений на обучающем наборе данных:")
         st.write(train_comparison_df)
-        st.subheader("Предсказания на тестовом наборе данных:")
 
         test_pred = model.predict(test[features])
         test_comparison_df = pd.DataFrame({'Actual': test[y_true], 'Predicted': test_pred})

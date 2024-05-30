@@ -36,16 +36,13 @@ class LinReg:
 
 st.title("Линейная регрессия")
 uploaded_train = st.file_uploader("Загрузите обучающую выборку CSV", type=["csv"])
-st.write('Обучающая выборка должна содержать данные с расстоянием объекта от центра, площадь объекта и его фактическая стоимость. На этом датасете модель будет обучаться.')
 uploaded_test = st.file_uploader("Загрузите тестовую выборку CSV", type=["csv"])
-
-
+#model = None
 if uploaded_train is not None and uploaded_test is not None:
     train = pd.read_csv(uploaded_train)
     test = pd.read_csv(uploaded_test)
     features = st.multiselect("Выберите параметры для обучения", train.columns, default=[]) # сохраняем параметры для нормировки
     y_true = st.selectbox("Выберите таргет", train.columns) # сохраняем таргет
-    st.write('Таргет - это параметр, который модель должна предсказать')
     normalize = st.checkbox("Нормировать данные (StandardScaler)")    
 
     if normalize:
@@ -62,28 +59,30 @@ if uploaded_train is not None and uploaded_test is not None:
         train_intercept = model.intercept_
         selected_features = ', '.join(features)
         st.write(f"Выбранные параметры: {selected_features}")
-        st.subheader("Веса модели (коэффициенты):")
+        st.write("Веса модели (коэффициенты):")
         st.write(pd.DataFrame(train_coefs, index=features, columns=["Weights"]))
          
         train_pred = model.predict(train[features])
         train_mse = model.score(train[features], train[y_true])
-        st.subheader("Предсказания на обучающем наборе данных:")
-        st.write(f"Среднеквадратичная ошибка на обучающем наборе данных: {round(train_mse, 0)}")
-    
+        #st.write("Предсказания на обучающем наборе данных:")
+        #st.write(train_pred)
+        st.write("Среднеквадратичная ошибка на обучающем наборе данных:")
+        st.write(train_mse)
 
         # Сравнение предсказанных значений с реальными на обучающем наборе данных
-        train_comparison_df = pd.DataFrame({'Actual': train[y_true], 'Predicted': train_pred, 'MSE': round((train[y_true] - train_pred) ** 2, 0)})
+        train_comparison_df = pd.DataFrame({'Actual': train[y_true], 'Predicted': train_pred})
         st.write("Сравнение предсказанных и реальных значений на обучающем наборе данных:")
         st.write(train_comparison_df)
             
 
         test_pred = model.predict(test[features])
         test_mse = model.score(test[features], test[y_true])
-        st.subheader("Предсказания на тестовом наборе данных:")
-        st.write(f"Среднеквадратичная ошибка на тестовом наборе данных: {round(test_mse, 0)}")
+       # st.write("Предсказания на тестовом наборе данных:")
+        #st.write(test_pred)
+        st.write("Среднеквадратичная ошибка на тестовом наборе данных:")
+        st.write(test_mse)
 
-
-        test_comparison_df = pd.DataFrame({'Actual': test[y_true], 'Predicted': test_pred, 'MSE': round((test[y_true] - test_pred) ** 2, 0)})
+        test_comparison_df = pd.DataFrame({'Actual': test[y_true], 'Predicted': test_pred})
         st.write("Сравнение предсказанных и реальных значений на тестовом наборе данных:")
         st.write(test_comparison_df)
 
