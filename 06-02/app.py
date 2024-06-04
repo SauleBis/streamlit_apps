@@ -8,7 +8,7 @@ import sklearn
 sklearn.set_config(transform_output="pandas")
 
 
-ml_pipline = joblib.load('06_02_ml_pipeline_voting.pkl')
+ml_pipline = joblib.load('/06_02_ml_pipeline_voting.pkl')
 
 st.title('Модель предсказания сердечных заболеваний')
 st.subheader('Выберите значения параметров')
