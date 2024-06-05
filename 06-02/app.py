@@ -7,7 +7,7 @@ import os
 import sklearn
 sklearn.set_config(transform_output="pandas")
 
-ml_pipline = joblib.load('streamlit_apps/06-02/model/ml_pipeline_voting.pkl')
+ml_pipline = joblib.load('/home/saule/streamlit_apps/06-02/model/ml_pipeline_voting.pkl')
 
 
 st.title('Модель предсказания сердечных заболеваний')
