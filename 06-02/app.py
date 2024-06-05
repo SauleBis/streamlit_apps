@@ -1,14 +1,14 @@
 import joblib
 import pandas as pd
 import streamlit as st
-
+import os
 
 # Важная настройка для корректной настройки pipeline!
 import sklearn
 sklearn.set_config(transform_output="pandas")
 
+ml_pipline = joblib.load('model/ml_pipeline_voting.pkl')
 
-ml_pipline = joblib.load('model/06_02_ml_pipeline_voting.pkl')
 
 st.title('Модель предсказания сердечных заболеваний')
 st.subheader('Выберите значения параметров')
@@ -31,8 +31,9 @@ st.write("Up: upsloping, Flat: flat, Down: downsloping")
 
 df = pd.DataFrame({'Age': [Age], 'Sex': [Sex], 'ChestPainType': [ChestPainType], 'RestingBP': [RestingBP], 'Cholesterol': [Cholesterol], 'FastingBS': [FastingBS], 
                    'RestingECG': [RestingECG], 'MaxHR': [MaxHR], 'ExerciseAngina': [ExerciseAngina], 'Oldpeak': [Oldpeak], 'ST_Slope': [ST_Slope]})
-
-st.table(df)
-y_pred = ml_pipline.predict(df)
-st.write("Прогноз наличия сердечных заболеваний: ", y_pred)
-st.write("1 - есть, 0 - нет")
+if st.button('Predict'):
+    st.write('Ваши данные')
+    st.table(df)
+    y_pred = ml_pipline.predict(df)
+    st.write("Прогноз наличия сердечных заболеваний: ", y_pred)
+    st.write("1 - есть, 0 - нет")
